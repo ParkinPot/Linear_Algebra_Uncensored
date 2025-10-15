@@ -104,6 +104,12 @@ class LinearAlgebraApp:
                                    bg='#9b59b6', fg='white', state='disabled')
         self.process_btn.pack(fill='x', padx=5, pady=5)
         
+        # Save processed image
+        self.save_btn = tk.Button(process_frame, text="Save Result", 
+                                  command=self.save_image, font=('Arial', 10, 'bold'),
+                                  bg='#2ecc71', fg='white', state='disabled')
+        self.save_btn.pack(fill='x', padx=5, pady=5)
+        
         # Learning resources (training removed)
         learn_frame = tk.LabelFrame(left_panel, text="Learning Resources", 
                                    font=('Arial', 12, 'bold'), bg='#ecf0f1')
@@ -244,6 +250,8 @@ class LinearAlgebraApp:
             
             # เปิดใช้งานปุ่มประมวลผล
             self.process_btn.config(state='normal')
+            # ปิดปุ่มบันทึกจนกว่าจะประมวลผลเสร็จ
+            self.save_btn.config(state='disabled')
             self.status_var.set("Image loaded successfully")
             
         except Exception as e:
@@ -286,12 +294,41 @@ class LinearAlgebraApp:
             self.root.after(0, lambda: self.cos_sim_var.set(f"Cosine Similarity: {cos_sim:.6f}"))
             self.root.after(0, lambda: self.status_var.set("Processing completed"))
             self.root.after(0, lambda: self.process_btn.config(state='normal'))
+            self.root.after(0, lambda: self.save_btn.config(state='normal'))
             
         except Exception as e:
             self.root.after(0, lambda: messagebox.showerror("Error", f"Processing failed: {str(e)}"))
             self.root.after(0, lambda: self.status_var.set("Processing failed"))
             self.root.after(0, lambda: self.process_btn.config(state='normal'))
     
+    def save_image(self):
+        """บันทึกภาพที่ผ่านการประมวลผล (Restored) ไปยังไฟล์"""
+        try:
+            if self.processed_image is None:
+                messagebox.showwarning("Warning", "No processed image to save")
+                return
+            
+            # เลือกที่จัดเก็บไฟล์
+            file_path = filedialog.asksaveasfilename(
+                title="Save Restored Image",
+                defaultextension=".png",
+                filetypes=[
+                    ("PNG Image", "*.png"),
+                    ("JPEG Image", "*.jpg;*.jpeg"),
+                    ("Bitmap Image", "*.bmp"),
+                    ("All Files", "*.*")
+                ]
+            )
+            if not file_path:
+                return
+            
+            # แปลง numpy array (0..1 float) เป็น uint8 และบันทึกด้วย PIL
+            img_uint8 = np.clip(self.processed_image * 255.0, 0, 255).astype(np.uint8)
+            Image.fromarray(img_uint8).save(file_path)
+            messagebox.showinfo("Saved", f"Restored image saved to:\n{file_path}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save image: {str(e)}")
+
     def calculate_cosine_similarity(self):
         """คำนวณ cosine similarity"""
         try:
