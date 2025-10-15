@@ -1,0 +1,22 @@
+# Linear Algebra - Image Deblurring Application Requirements
+
+# Core dependencies
+torch>=1.9.0
+torchvision>=0.10.0
+numpy>=1.21.0
+opencv-python>=4.5.0
+Pillow>=8.3.0
+matplotlib>=3.4.0
+
+# Image processing
+scikit-image>=0.18.0
+
+# Scientific computing
+scipy>=1.7.0
+
+# Training and utilities
+tqdm>=4.60.0
+PyYAML>=6.0
+
+# Note: tkinter is usually included with Python installation
+# If tkinter is missing, you may need to reinstall Python with tkinter support
