@@ -1,145 +1,256 @@
-# Linear Algebra - Image Deblurring (Inference-Only)
+# Linear Algebra – Image Deblurring (Inference-Only)
 
-An easy-to-use application that demonstrates modern image deblurring with a pre-trained MPRNet model, while highlighting core linear algebra ideas: matrix convolution and cosine similarity.
+This project demonstrates modern image deblurring using a pre-trained **MPRNet** model while illustrating key **linear algebra concepts** used in deep learning, including **matrix convolution** and **cosine similarity**.
 
-## 📁 Project Structure
+The application provides both a **graphical interface** and a **command-line interface** for processing blurred images and visualizing restoration results.
+
+---
+
+# Project Structure
 
 ```
 organized_project/
-├── main.py                 # Main GUI Application
-├── config.py              # Configuration settings
-├── requirements.txt       # Dependencies
-├── models/                # Neural network models
-│   ├── MPRNet.py         # MPRNet architecture implementation
+├── main.py                 # Main GUI application
+├── config.py               # Configuration settings
+├── requirements.txt        # Project dependencies
+
+├── models/                 # Neural network models
+│   ├── MPRNet.py           # MPRNet architecture implementation
 │   └── model_deblurring.pth # Pre-trained model weights
-├── datasets/              # Image datasets
-│   └── blurred_images/    # Blurred test images (300 images)
-├── scripts/               # Python scripts
-│   ├── deblur_demo.py     # Enhanced command-line demo
-│   └── demo.py           # Official MPRNet demo
-├── utils/                 # Utility functions
-│   ├── __init__.py       # Package initialization
-│   ├── image_utils.py    # Image processing utilities
-│   ├── math_utils.py     # Mathematical operations
-│   └── model_utils.py    # Model utilities
-├── results/               # Output results
-└── README.md             # This file
+
+├── datasets/               # Image datasets
+│   └── blurred_images/     # Blurred test images (300 images)
+
+├── scripts/                # Command-line scripts
+│   ├── deblur_demo.py      # Enhanced CLI demo
+│   └── demo.py             # Official MPRNet demo
+
+├── utils/                  # Utility functions
+│   ├── __init__.py
+│   ├── image_utils.py      # Image processing utilities
+│   ├── math_utils.py       # Mathematical operations
+│   └── model_utils.py      # Model utilities
+
+├── results/                # Output directory
+└── README.md               # Project documentation
 ```
 
-## 🚀 How to Run
+---
 
-### Option 1: GUI Application (Recommended)
-```bash
-python main.py
-```
-This launches a user-friendly GUI with:
-- Image selection (browse or use samples)
-- Real-time processing
-- Side-by-side comparison
-- Cosine similarity calculation
-- **Mathematical Concepts Explanation**
-- Professional interface
+# Overview
 
-### Method 2: Command Line Interface
-```bash
-# Interactive mode
-python scripts/deblur_demo.py
+The system allows users to load a blurred image and restore it using a **pre-trained MPRNet model**.
 
-# Process specific sample image
-python scripts/deblur_demo.py --sample 1
+Processing pipeline:
 
-# Process custom image
-python scripts/deblur_demo.py --image path/to/your/image.jpg
+1. A blurred image is loaded through the GUI or CLI.
+2. The image is resized to **512 × 512** and converted into a **PyTorch tensor**.
+3. The **MPRNet model** performs an inference pass to produce a restored image.
+4. The application computes **cosine similarity** between the blurred and restored images.
+5. Results are displayed with a **side-by-side comparison and similarity score**.
 
-# Save results
-python scripts/deblur_demo.py --sample 1 --save results/output.png
-```
+This project is **inference-only** and does not include training code.
 
-### Option 2: Official MPRNet Demo
-```bash
-python scripts/demo.py --task Deblurring --input_dir datasets/blurred_images --result_dir results
-```
+---
 
-## 🛠️ Setup
+# Setup
 
-### Prerequisites
-- Python 3.8+
-- CUDA (optional, for GPU acceleration)
+## Prerequisites
 
-### Install Dependencies
+* Python 3.8 or later
+* CUDA-compatible GPU (optional but recommended)
+
+## Installation
+
+Install dependencies using:
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### Key Dependencies
-- `torch>=1.9.0` - PyTorch framework
-- `torchvision>=0.10.0` - Computer vision utilities
-- `opencv-python>=4.5.0` - Image processing
-- `matplotlib>=3.4.0` - Plotting and visualization
-- `numpy>=1.21.0` - Numerical computing
-- `Pillow>=8.3.0` - Image manipulation
-- `scikit-image>=0.18.0` - Advanced image processing
+## Key Dependencies
 
-## 🧭 How the Project Works
+* `torch>=1.9.0` – PyTorch deep learning framework
+* `torchvision>=0.10.0` – Computer vision utilities
+* `opencv-python>=4.5.0` – Image processing
+* `matplotlib>=3.4.0` – Visualization
+* `numpy>=1.21.0` – Numerical computation
+* `Pillow>=8.3.0` – Image handling
+* `scikit-image>=0.18.0` – Advanced image processing
 
-1. You load a blurred image via the GUI.
-2. The image is resized to 512×512 and converted to a PyTorch tensor.
-3. The pre-trained `MPRNet` model runs an inference pass and outputs a restored image.
-4. The app computes cosine similarity between the original (blurred) and restored images as a simple numerical comparison.
-5. The GUI displays both images side-by-side along with the cosine similarity score and explanatory math.
+---
 
-Key components:
-- `models/MPRNet.py`: MPRNet network definition.
-- `models/model_deblurring.pth`: Pre-trained weights (loaded at startup).
-- `main.py`: Tkinter-based GUI to load images, run inference, and show results.
+# Running the Application
 
-Notes:
-- This build is inference-only (no training code or configs).
-- GPU is auto-used if CUDA is available; otherwise falls back to CPU.
+## GUI Application (Recommended)
 
-## ✨ Features
+Run the graphical interface:
 
-- **Multi-Stage Progressive Image Restoration** (MPRNet)
-- **Real-time Processing** with optional GPU acceleration
-- **Cosine Similarity Analysis** shown in the UI
-- **Simple GUI**: Browse image or load sample by ID
-- **Mathematical Concepts Viewer**: Short, friendly explanations
+```bash
+python main.py
+```
 
-### Linear Algebra Applications
-- **Matrix Convolution** (CNN kernels)
-- **Vector Similarity** (cosine similarity)
+The GUI provides:
 
-## 🧠 Linear Algebra in This Project
+* Image browsing or sample image selection
+* Real-time image processing
+* Side-by-side comparison of blurred and restored images
+* Cosine similarity score
+* Explanations of mathematical concepts used in the model
 
-- **Matrix Convolution (CNN kernels)**
-  - What: Small matrices (kernels) slide over the image and compute weighted sums; stacking many learned kernels yields feature extraction and restoration.
-  - Math: y[m,n] = Σ Σ x[i,j] · k[m-i, n-j]
-  - Where in code: Implemented throughout `models/MPRNet.py` via the `conv(...)` helper and convolutional layers inside the model’s stages.
+---
 
-- **Cosine Similarity (vector-space comparison)**
-  - What: Measures the angle between two vectors; close to 1 means highly similar direction.
-  - Math: cos(θ) = (a · b) / (||a|| · ||b||)
-  - Where in code: Computed in `main.py` in `calculate_cosine_similarity()` by flattening the original (blurred) and restored image tensors and using `torch.nn.functional.cosine_similarity`.
+## Command-Line Interface
 
-## 🎨 GUI Highlights
-- Image selection (browse or numbered samples)
-- Process button runs inference
-- Two-pane display (blurred vs. restored)
-- Cosine similarity shown beneath results
-- Optional math explainer window
+Interactive mode:
 
-## 📈 Expected Performance (rough guides)
-- CPU: ~2–5s per 512×512 image
-- GPU: ~0.5–1s per 512×512 image
-- Memory: ~2–4 GB RAM
+```bash
+python scripts/deblur_demo.py
+```
 
-## 📚 References
+Process a sample image:
 
-### Academic Papers
-- **MPRNet**: "Multi-Stage Progressive Image Restoration" - CVPR 2021
-- **Original Paper**: https://arxiv.org/abs/2102.02808
+```bash
+python scripts/deblur_demo.py --sample 1
+```
 
-### Linear Algebra Resources
-- **Convolution**: 2D convolution operations in deep learning
-- **Matrix Operations**: Linear transformations and tensor operations
-- **Vector Similarity**: Cosine similarity and distance metrics
+Process a custom image:
+
+```bash
+python scripts/deblur_demo.py --image path/to/image.jpg
+```
+
+Save results:
+
+```bash
+python scripts/deblur_demo.py --sample 1 --save results/output.png
+```
+
+---
+
+## Official MPRNet Demo
+
+You may also run the original demo script:
+
+```bash
+python scripts/demo.py --task Deblurring --input_dir datasets/blurred_images --result_dir results
+```
+
+---
+
+# Features
+
+* Multi-stage progressive image restoration using **MPRNet**
+* Graphical user interface for interactive use
+* Command-line interface for batch testing
+* Automatic GPU acceleration when CUDA is available
+* Side-by-side visualization of results
+* Cosine similarity comparison between images
+* Educational explanations of underlying mathematical concepts
+
+---
+
+# Linear Algebra Concepts Demonstrated
+
+## Matrix Convolution
+
+Convolution is the core operation used in convolutional neural networks.
+
+Small matrices called **kernels** slide across the input image and compute weighted sums, allowing the network to detect patterns and restore image details.
+
+Mathematically:
+
+[
+y[m,n] = \sum_i \sum_j x[i,j] \cdot k[m-i, n-j]
+]
+
+Where:
+
+* (x) represents the input image
+* (k) represents the convolution kernel
+* (y) represents the output feature map
+
+In this project, convolution operations are implemented throughout the model in:
+
+```
+models/MPRNet.py
+```
+
+using convolutional layers.
+
+---
+
+## Cosine Similarity
+
+Cosine similarity measures the **angle between two vectors** in a vector space.
+
+It is used here to compare the similarity between the **blurred image** and the **restored image**.
+
+[
+\cos(\theta) = \frac{a \cdot b}{|a| |b|}
+]
+
+Where:
+
+* (a) and (b) are flattened image vectors
+* (\cdot) denotes the dot product
+* (|\cdot|) denotes vector magnitude
+
+The similarity is calculated in:
+
+```
+main.py
+```
+
+by flattening the image tensors and applying:
+
+```
+torch.nn.functional.cosine_similarity
+```
+
+---
+
+# GUI Components
+
+The graphical interface includes:
+
+* Image selection (file browser or sample ID)
+* Processing button to run inference
+* Side-by-side display of blurred and restored images
+* Cosine similarity output
+* Optional mathematical explanation panel
+
+---
+
+# Performance
+
+Typical processing times for a **512 × 512** image:
+
+| Hardware | Time per Image |
+| -------- | -------------- |
+| CPU      | 2 – 5 seconds  |
+| GPU      | 0.5 – 1 second |
+
+Estimated memory usage:
+
+* 2 – 4 GB RAM
+
+---
+
+# References
+
+## Research Paper
+
+MPRNet: Multi-Stage Progressive Image Restoration
+CVPR 2021
+
+[https://arxiv.org/abs/2102.02808](https://arxiv.org/abs/2102.02808)
+
+---
+
+## Related Topics
+
+* Convolutional Neural Networks
+* Linear Algebra for Deep Learning
+* Image Restoration Techniques
+* Vector Similarity Metrics
